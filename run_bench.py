@@ -13,8 +13,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 from contextbench import Pricing, default_strategies, load_squad, sweep  # noqa: E402
 from contextbench.retrieval import Retriever, recall_at_k  # noqa: E402
 
-SIZES = [10, 25, 50, 100, 200, 400, 800, 1600]
-QUESTIONS = 60
+# SQuAD dev v1.1 holds 2,067 paragraphs, so 2000 is the ceiling this corpus allows.
+SIZES = [10, 25, 50, 100, 200, 400, 800, 1600, 2000]
+# 60 was the first number that ran quickly. Recall is reported to the percent and the
+# headline numbers include a 100%, which on 60 questions has a wide interval around it;
+# SQuAD dev offers 10,570, so the sample was the cheapest thing in the benchmark to fix.
+QUESTIONS = 400
 
 
 def main() -> None:

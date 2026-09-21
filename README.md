@@ -64,12 +64,33 @@ absurd past a few thousand tokens. With it, the corpus bills at roughly a tenth 
 first call — and "just put the handbook in the context" stops being a joke.
 
 ```
-CAG, 400 documents, with caching       $1.89 per 1,000 questions
+CAG, 400 documents, with caching       $1.69 per 1,000 questions
 CAG, 400 documents, without caching   $15.98 per 1,000 questions
 ```
 
-An 8.4× difference from one pricing parameter. Set the cache price equal to the input price
+A 9.5× difference from one pricing parameter. Set the cache price equal to the input price
 in the UI and watch the crossover collapse from 50 documents to 10.
+
+## Retrieval gets worse as the corpus grows, and CAG buys its way out
+
+400 questions per corpus size, from SQuAD dev's 10,570. An earlier version asked 60, which
+was enough to rank the strategies and not enough to see this:
+
+| documents | RAG top-1 | RAG top-4 | MAG top-3 | CAG |
+|---:|---:|---:|---:|---:|
+| 50 | 84.0% | 96.0% | 99.0% | 100% |
+| 400 | 76.8% | 91.8% | 95.8% | 100% |
+| 2,000 | **69.5%** | 88.8% | 93.5% | 100% |
+
+**RAG top-1 loses 14.5 points of recall as the corpus grows 40×.** Monotonic, in every
+strategy that retrieves - the more there is to confuse the retriever, the more it misses.
+CAG holds 100% throughout for the obvious reason that it never chooses.
+
+That is the trade the cost table is actually about. At 2,000 documents CAG-with-cache costs
+**$10.22** per thousand questions against RAG top-4's **$0.25** - forty times the price for
+eleven points of recall. Whether that is worth it is a decision this does not make, but it
+is the decision, and a 60-question sample was too noisy to state the recall side of it
+cleanly.
 
 ## What it measures, and what it refuses to
 
